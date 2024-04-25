@@ -21,4 +21,9 @@ export default defineConfig({
     ssr: {
         noExternal: ["vue", "@protonemedia/laravel-splade"]
     },
+    server: {
+        hmr: {
+            host: 'localhost',
+        },
+    },
 });
