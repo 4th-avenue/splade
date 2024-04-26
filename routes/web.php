@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use ProtoneMedia\Splade\Facades\SEO;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,9 @@ Route::middleware('splade')->group(function () {
     Route::spladeUploads();
 
     Route::get('/', function () {
+        SEO::title('Laravel Splade Course')
+            ->description('Become the Splade expert!')
+            ->keywords('laravel, splade, course');
         return view('welcome');
     });
 
