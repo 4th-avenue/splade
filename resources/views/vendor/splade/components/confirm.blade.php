@@ -44,7 +44,7 @@
                                     </div>
                                 </div>
 
-                                <div class="mt-5 sm:mt-4 sm:flex">
+                                <div class="mt-5 sm:mt-4 sm:flex justify-end">
                                     <button
                                         dusk="splade-confirm-confirm"
                                         type="button"
