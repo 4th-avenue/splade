@@ -7,7 +7,7 @@
                 <Link href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</Link>
 
                 @if (Route::has('register'))
-                    <Link href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register</Link>
+                    <Link confirm="정말로 우리 웹사이트의 회원이 되어주실 건가요?" confirm-button="네, 물론이죠!" cancel-button="아니요.." href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register</Link>
                 @endif
             @endauth
         </div>
