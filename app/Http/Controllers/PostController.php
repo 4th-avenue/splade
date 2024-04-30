@@ -36,6 +36,7 @@ class PostController extends Controller
                 ->column('title', canBeHidden: false, sortable: true)
                 ->withGlobalSearch(columns: ['title'])
                 ->column('slug', sortable: true)
+                ->column('action')
                 ->selectFilter('category_id', $categories)
                 ->paginate(5),
         ]);
