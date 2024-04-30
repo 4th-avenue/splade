@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use ProtoneMedia\Splade\SpladeTable;
@@ -24,15 +25,18 @@ class PostController extends Controller
         });
 
         $posts = QueryBuilder::for(Post::class)
-        ->defaultSort('title')
-        ->allowedSorts(['title', 'slug'])
-        ->allowedFilters(['title', 'slug', $globalSearch]);
+            ->defaultSort('title')
+            ->allowedSorts(['title', 'slug'])
+            ->allowedFilters(['title', 'slug', 'category_id', $globalSearch]);
+
+        $categories = Category::pluck('name', 'id')->toArray();
 
         return view('posts.index', [
             'posts' => SpladeTable::for($posts)
                 ->column('title', canBeHidden: false, sortable: true)
                 ->withGlobalSearch(columns: ['title'])
                 ->column('slug', sortable: true)
+                ->selectFilter('category_id', $categories)
                 ->paginate(5),
         ]);
     }
