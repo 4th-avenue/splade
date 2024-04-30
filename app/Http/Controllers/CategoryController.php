@@ -19,4 +19,9 @@ class CategoryController extends Controller
                 ->paginate(5),
         ]);
     }
+
+    public function create()
+    {
+        return view('categories.create');
+    }
 }
