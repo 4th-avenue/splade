@@ -12,7 +12,11 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            Form
+            <x-splade-form :action="route('categories.store')" class="max-w-md mx-auto p-4 bg-white rounded-md">
+                <x-splade-input name="name" label="Name" />
+                <x-splade-input name="slug" label="Slug" />
+                <x-splade-submit class="mt-4" />
+            </x-splade-form>
         </div>
     </div>
 </x-app-layout>
