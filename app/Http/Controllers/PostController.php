@@ -9,6 +9,7 @@ use Illuminate\Support\Collection;
 use ProtoneMedia\Splade\SpladeTable;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
+use App\Http\Requests\PostStoreRequest;
 
 class PostController extends Controller
 {
@@ -47,5 +48,12 @@ class PostController extends Controller
         $categories = Category::pluck('name', 'id')->toArray();
 
         return view('posts.create', compact('categories'));
+    }
+
+    public function store(PostStoreRequest $request)
+    {
+        Post::create($request->validated());
+
+        return redirect()->route('posts.index');
     }
 }
