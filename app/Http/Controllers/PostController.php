@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use ProtoneMedia\Splade\SpladeTable;
 use Spatie\QueryBuilder\QueryBuilder;
+use ProtoneMedia\Splade\Facades\Toast;
 use Spatie\QueryBuilder\AllowedFilter;
 use App\Http\Requests\PostStoreRequest;
 
@@ -53,6 +54,7 @@ class PostController extends Controller
     public function store(PostStoreRequest $request)
     {
         Post::create($request->validated());
+        Toast::title('새 글을 저장했습니다!');
 
         return redirect()->route('posts.index');
     }
