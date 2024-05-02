@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PostStoreRequest extends FormRequest
@@ -23,7 +24,7 @@ class PostStoreRequest extends FormRequest
     {
         return [
             'title' => 'required|max:255',
-            'slug' => 'required|max:255|unique:posts,slug',
+            'slug' => 'required|max:255|'.Rule::unique('posts', 'slug')->ignore($this->route('post')),
             'description' => 'required',
             'category_id' => 'required|exists:categories,id',
         ];

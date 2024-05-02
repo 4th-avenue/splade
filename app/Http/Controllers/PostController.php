@@ -58,4 +58,19 @@ class PostController extends Controller
 
         return redirect()->route('posts.index');
     }
+
+    public function edit(Post $post)
+    {
+        $categories = Category::pluck('name', 'id')->toArray();
+
+        return view('posts.edit', compact('post', 'categories'));
+    }
+
+    public function update(PostStoreRequest $request, Post $post)
+    {
+        $post->update($request->validated());
+        Toast::title('글을 수정했습니다!');
+
+        return redirect()->route('posts.index');
+    }
 }
