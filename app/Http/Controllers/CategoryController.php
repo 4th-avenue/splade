@@ -39,4 +39,12 @@ class CategoryController extends Controller
     {
         return view('categories.edit', compact('category'));
     }
+
+    public function update(CategoryStoreRequest $request, Category $category)
+    {
+        $category->update($request->validated());
+        Toast::title('카테고리를 수정했습니다!');
+
+        return redirect()->route('categories.index');
+    }
 }
