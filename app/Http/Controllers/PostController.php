@@ -73,4 +73,12 @@ class PostController extends Controller
 
         return redirect()->route('posts.index');
     }
+
+    public function destroy(Post $post)
+    {
+        $post->delete();
+        Toast::success('글을 삭제했습니다!');
+
+        return redirect()->back();
+    }
 }
