@@ -47,4 +47,12 @@ class CategoryController extends Controller
 
         return redirect()->route('categories.index');
     }
+
+    public function destroy(Category $category)
+    {
+        $category->delete();
+        Toast::success('카테고리를 삭제했습니다!');
+
+        return redirect()->back();
+    }
 }

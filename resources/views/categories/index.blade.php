@@ -15,6 +15,7 @@
             <x-splade-table :for="$categories">
                 @cell('action', $category)
                 <Link href="{{ route('categories.edit', $category->id) }}" class="text-green-600 hover:text-green-400 font-semibold">Edit</Link>
+                <Link confirm="카테고리를 삭제하시겠습니까?" confirm-text="Are you sure?" confirm-button="Yes" cancel-button="No" href="{{ route('categories.destroy', $category->id) }}" method="DELETE" class="text-red-600 hover:text-red-400 font-semibold ml-2" preserve-scroll>Delete</Link>
                 @endcell
             </x-splade-table>
         </div>
