@@ -48,8 +48,13 @@ class Categories extends AbstractTable
     public function configure(SpladeTable $table)
     {
         $table
-            ->withGlobalSearch(columns: ['id'])
-            ->column('id', sortable: true);
+            ->withGlobalSearch(columns: ['name'])
+            ->column('id', sortable: true)
+            ->column('name', canBeHidden: false, sortable: true)
+            ->column('slug')
+            ->column('action', exportAs: false)
+            ->export()
+            ->paginate(5);
 
             // ->searchInput()
             // ->selectFilter()
