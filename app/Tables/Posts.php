@@ -3,9 +3,14 @@
 namespace App\Tables;
 
 use App\Models\Post;
+use App\Models\Category;
 use Illuminate\Http\Request;
-use ProtoneMedia\Splade\AbstractTable;
+use Maatwebsite\Excel\Excel;
+use Illuminate\Support\Collection;
 use ProtoneMedia\Splade\SpladeTable;
+use Spatie\QueryBuilder\QueryBuilder;
+use ProtoneMedia\Splade\AbstractTable;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class Posts extends AbstractTable
 {
@@ -47,9 +52,32 @@ class Posts extends AbstractTable
      */
     public function configure(SpladeTable $table)
     {
+        $globalSearch = AllowedFilter::callback('global', function ($query, $value) {
+            $query->where(function ($query) use ($value) {
+                Collection::wrap($value)->each(function ($value) use ($query) {
+                    $query
+                        ->orWhere('title', 'LIKE', "%{$value}%")
+                        ->orWhere('slug', 'LIKE', "%{$value}%");
+                });
+            });
+        });
+
+        $posts = QueryBuilder::for(Post::class)
+            ->defaultSort('title')
+            ->allowedSorts(['title', 'slug'])
+            ->allowedFilters(['title', 'slug', 'category_id', $globalSearch]);
+
+        $categories = Category::pluck('name', 'id')->toArray();
+
         $table
-            ->withGlobalSearch(columns: ['id'])
-            ->column('id', sortable: true);
+            ->column('id', sortable: true)
+            ->column('title', canBeHidden: false, sortable: true)
+            ->withGlobalSearch(columns: ['title'])
+            ->column('slug', sortable: true)
+            ->column('action', exportAs: false)
+            ->export(label: 'CSV Export', filename: 'posts.csv',  type: Excel::CSV)
+            ->selectFilter('category_id', $categories)
+            ->paginate(5);
 
             // ->searchInput()
             // ->selectFilter()
