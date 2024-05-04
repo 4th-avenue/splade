@@ -10,6 +10,7 @@ use Illuminate\Support\Collection;
 use ProtoneMedia\Splade\SpladeTable;
 use Spatie\QueryBuilder\QueryBuilder;
 use ProtoneMedia\Splade\AbstractTable;
+use ProtoneMedia\Splade\Facades\Toast;
 use Spatie\QueryBuilder\AllowedFilter;
 
 class Posts extends AbstractTable
@@ -64,7 +65,7 @@ class Posts extends AbstractTable
 
         $posts = QueryBuilder::for(Post::class)
             ->defaultSort('title')
-            ->allowedSorts(['title', 'slug'])
+            ->allowedSorts(['id', 'title', 'slug'])
             ->allowedFilters(['title', 'slug', 'category_id', $globalSearch]);
 
         $categories = Category::pluck('name', 'id')->toArray();
@@ -74,16 +75,25 @@ class Posts extends AbstractTable
             ->column('title', canBeHidden: false, sortable: true)
             ->withGlobalSearch(columns: ['title'])
             ->column('slug', sortable: true)
+            ->column('updated_at')
             ->column('action', exportAs: false)
+            ->bulkAction(
+                label: 'Touch timestamp',
+                each: fn (Post $post) => $post->touch(),
+                before: fn () => info('Touching the selected posts'),
+                after: fn () => Toast::info('Timestamps updated!')
+            )
+            ->bulkAction(
+                label: 'Delete Posts',
+                each: fn (Post $post) => $post->delete(),
+                confirm: 'Delete Posts',
+                confirmText: 'Are you sure you want to delete the posts?',
+                confirmButton: 'Yes',
+                cancelButton: 'No',
+                after: fn () => Toast::info('Posts Deleted!')
+            )
             ->export(label: 'CSV Export', filename: 'posts.csv',  type: Excel::CSV)
             ->selectFilter('category_id', $categories)
             ->paginate(5);
-
-            // ->searchInput()
-            // ->selectFilter()
-            // ->withGlobalSearch()
-
-            // ->bulkAction()
-            // ->export()
     }
 }
