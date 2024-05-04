@@ -4,8 +4,9 @@ namespace App\Tables;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
-use ProtoneMedia\Splade\AbstractTable;
 use ProtoneMedia\Splade\SpladeTable;
+use ProtoneMedia\Splade\AbstractTable;
+use ProtoneMedia\Splade\Facades\Toast;
 
 class Categories extends AbstractTable
 {
@@ -52,15 +53,15 @@ class Categories extends AbstractTable
             ->column('id', sortable: true)
             ->column('name', canBeHidden: false, sortable: true)
             ->column('slug')
+            ->column('updated_at')
             ->column('action', exportAs: false)
+            ->bulkAction(
+                label: 'Touch timestamp',
+                each: fn (Category $category) => $category->touch(),
+                before: fn () => info('Touching the selected categories'),
+                after: fn () => Toast::info('Timestamps updated!')
+            )
             ->export()
             ->paginate(5);
-
-            // ->searchInput()
-            // ->selectFilter()
-            // ->withGlobalSearch()
-
-            // ->bulkAction()
-            // ->export()
     }
 }
