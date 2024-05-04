@@ -61,6 +61,15 @@ class Categories extends AbstractTable
                 before: fn () => info('Touching the selected categories'),
                 after: fn () => Toast::info('Timestamps updated!')
             )
+            ->bulkAction(
+                label: 'Delete Categories',
+                each: fn (Category $category) => $category->delete(),
+                confirm: 'Delete Categories',
+                confirmText: 'Are you sure you want to delete the categories?',
+                confirmButton: 'Yes',
+                cancelButton: 'No',
+                after: fn () => Toast::info('Categories Deleted!')
+            )
             ->export()
             ->paginate(5);
     }
